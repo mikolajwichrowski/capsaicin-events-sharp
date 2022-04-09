@@ -1,0 +1,8 @@
+/workspace/capsaicin-events-sharp/obj/Debug/net6.0/capsaicin-events-sharp.csproj.AssemblyReference.cache
+/workspace/capsaicin-events-sharp/obj/Debug/net6.0/capsaicin-events-sharp.GeneratedMSBuildEditorConfig.editorconfig
+/workspace/capsaicin-events-sharp/obj/Debug/net6.0/capsaicin-events-sharp.AssemblyInfoInputs.cache
+/workspace/capsaicin-events-sharp/obj/Debug/net6.0/capsaicin-events-sharp.AssemblyInfo.cs
+/workspace/capsaicin-events-sharp/obj/Debug/net6.0/capsaicin-events-sharp.csproj.CoreCompileInputs.cache
+/workspace/capsaicin-events-sharp/obj/Debug/net6.0/capsaicin-events-sharp.MvcApplicationPartsAssemblyInfo.cache
+/workspace/capsaicin-events-sharp/obj/Debug/net6.0/capsaicin-events-sharp.RazorAssemblyInfo.cache
+/workspace/capsaicin-events-sharp/obj/Debug/net6.0/capsaicin-events-sharp.RazorAssemblyInfo.cs
