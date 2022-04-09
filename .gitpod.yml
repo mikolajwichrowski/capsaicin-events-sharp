@@ -2,11 +2,11 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: Restore & Build
+  - name: Postinstall .NET 6.0 and dev certificates
     init: |
+      mkdir -p /tmp/dotnet && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0 --install-dir /tmp/dotnet 
       dotnet dev-certs https 
       dotnet restore
-      dotnet build
 
 vscode:
   extensions:
