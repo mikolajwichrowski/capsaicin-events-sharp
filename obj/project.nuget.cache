@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "cbYDd3Mn/DrhhoNZwN1G6rCPdRtorQEVmiKIKPmeqwYUUmF2FwWINWpW01cOK0y+jTJvIJTxoIiq3U2eWjCnnQ==",
+  "dgSpecHash": "hyIoM4d1qS1d+XOWx8M+Lk6GzOvSd5kvL60p3oDfTghNW1AdZz8UIcmbaB/5phCwkyar/Jx2IWYZmbtuTDcCUA==",
   "success": true,
   "projectFilePath": "/workspace/capsaicin-events-sharp/capsaicin-events-sharp.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/gitpod/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "/home/gitpod/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/home/gitpod/.nuget/packages/swashbuckle.aspnetcore/6.2.3/swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "/home/gitpod/.nuget/packages/swashbuckle.aspnetcore.swagger/6.2.3/swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "/home/gitpod/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.2.3/swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "/home/gitpod/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.2.3/swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
   "logs": []
 }
