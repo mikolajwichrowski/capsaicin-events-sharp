@@ -42,12 +42,12 @@ public class EventController : ControllerBase
         using (var context = new AppContext())
         {
             User creator = context.Users.Where(user => user.id == eventRequest.creator).First();
-            newEvent = new Event{
-                description = eventRequest.description,
-                location = eventRequest.description,
-                picture = eventRequest.description,
-                creator = creator
-            };
+            newEvent = new Event(
+                creator,
+                eventRequest.description,
+                eventRequest.picture,
+                eventRequest.location
+            );
             context.Events.Add(newEvent);
             context.SaveChanges();
         }

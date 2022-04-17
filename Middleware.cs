@@ -1,3 +1,5 @@
+#pragma warning disable CS8602
+
 using capsaicin_events_sharp.Entities;
 
 namespace capsaicin_events_sharp;
