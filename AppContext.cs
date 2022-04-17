@@ -7,6 +7,8 @@ namespace capsaicin_events_sharp;
 public class AppContext : DbContext
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Event> Events { get; set; }
+    
     public string DbPath { get; } = "./dev.sqlite";
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)

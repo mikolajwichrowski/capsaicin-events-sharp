@@ -18,18 +18,14 @@ public class Middleware {
             await this.next(context);
             return;
         }
-
-        try {
-            string loggedIn = context.Request.Cookies["logged_in"].ToString();
-            string userId = context.Request.Cookies["user_id"].ToString();
-            int userIdInt = Int32.Parse(userId);
-            using (var dbContext = new AppContext())
-            {
-                dbContext.Users.Where(user => user.id == userIdInt).First();
-                await this.next(context);
-            }
-        } catch {
-            throw new UnauthorizedAccessException();
-        }
+        
+        string loggedIn = context.Request.Cookies["logged_in"].ToString();
+        string userId = context.Request.Cookies["user_id"].ToString();
+        int userIdInt = Int32.Parse(userId);
+        using (var dbContext = new AppContext())
+        {
+            dbContext.Users.Where(user => user.id == userIdInt).First();
+            await this.next(context);
+        }   
     }
 }
