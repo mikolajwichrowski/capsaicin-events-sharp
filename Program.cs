@@ -16,6 +16,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<capsaicin_events_sharp.Middleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
