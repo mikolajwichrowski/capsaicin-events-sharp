@@ -3,12 +3,6 @@ using capsaicin_events_sharp.Entities;
 
 namespace capsaicin_events_sharp.Controllers;
 
-public class AuthenticationBody {
-
-    public string username { get; set; } = "";
-    public string password { get; set; } = "";
-}
-
 
 [ApiController]
 [Route("[controller]")]
@@ -22,9 +16,9 @@ public class AuthenticateController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<UserReturnType?> Post([FromBody] AuthenticationBody? authenticationBody)
+    public ActionResult<UserReturnType?> Post([FromBody] AuthenticationRequestType? AuthenticationRequestType)
     {
-        if(authenticationBody == null) {
+        if(AuthenticationRequestType == null) {
             return BadRequest();
         }
 
@@ -32,7 +26,7 @@ public class AuthenticateController : ControllerBase
         using (var context = new AppContext())
         {
             try {
-              user = context.Users.Where(row => row.username == authenticationBody.username && row.password == authenticationBody.password).First();
+              user = context.Users.Where(row => row.username == AuthenticationRequestType.username && row.password == AuthenticationRequestType.password).First();
             } catch {}   
         }
 

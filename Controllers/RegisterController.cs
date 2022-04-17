@@ -4,7 +4,6 @@ using capsaicin_events_sharp.Entities;
 namespace capsaicin_events_sharp.Controllers;
 
 
-
 [ApiController]
 [Route("[controller]")]
 public class RegisterController : ControllerBase
