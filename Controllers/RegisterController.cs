@@ -26,7 +26,7 @@ public class RegisterController : ControllerBase
         User user;
         using (var context = new AppContext())
         {
-            user = new User(authenticationBody.username, authenticationBody.password);
+            user = new User{username=authenticationBody.username, password=authenticationBody.password};
             context.Users.Add(user);
             context.SaveChanges();
         }

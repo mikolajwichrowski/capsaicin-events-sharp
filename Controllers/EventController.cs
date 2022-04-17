@@ -26,7 +26,7 @@ public class EventController : ControllerBase
                 .Include(row => row.creator)
                 .ToList()
                 .ConvertAll(row => new EventResponseType{
-                    creator = new UserResponseType{id=row.creator.id, username=row.creator.username},
+                    creator = new UserResponseType{ id=row.creator.id, username=row.creator.username },
                     description = row.description,
                     picture = row.picture,
                     location = row.location,
@@ -42,12 +42,12 @@ public class EventController : ControllerBase
         using (var context = new AppContext())
         {
             User creator = context.Users.Where(user => user.id == eventRequest.creator).First();
-            newEvent = new Event(
-                creator,
-                eventRequest.description,
-                eventRequest.picture,
-                eventRequest.location
-            );
+            newEvent = new Event{
+                creator=creator,
+                description=eventRequest.description,
+                picture=eventRequest.picture,
+                location=eventRequest.location
+            };
             context.Events.Add(newEvent);
             context.SaveChanges();
         }

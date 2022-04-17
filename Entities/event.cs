@@ -1,3 +1,5 @@
+#pragma warning disable CS8618
+
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -7,12 +9,6 @@ namespace capsaicin_events_sharp.Entities;
 
 public class Event
 {
-    public Event(User creator, string description, string picture, string location) {
-        this.creator = creator;
-        this.description = description;
-        this.picture = picture;
-        this.location = location;
-    }
 
     [Key]
     public int id { get; set; }

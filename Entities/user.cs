@@ -1,3 +1,5 @@
+#pragma warning disable CS8618
+
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -7,10 +9,6 @@ namespace capsaicin_events_sharp.Entities;
 [Index(nameof(username), IsUnique = true)]
 public class User
 {
-    public User(string username, string password) {
-        this.username = username;
-        this.password = password;
-    }
 
     public int id { get; set; }
 
