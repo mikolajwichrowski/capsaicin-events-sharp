@@ -17,7 +17,7 @@ public class RegisterController : ControllerBase
 
   
     [HttpPost]
-    public ActionResult<UserReturnType?> Post([FromBody] AuthenticationBody? authenticationBody)
+    public ActionResult<UserResponseType?> Post([FromBody] AuthenticationRequestType? authenticationBody)
     {
         if(authenticationBody == null) {
             return BadRequest();
@@ -46,6 +46,6 @@ public class RegisterController : ControllerBase
             new Microsoft.AspNetCore.Http.CookieOptions()
         );
 
-        return new UserReturnType{ id = user.id, username = user.username };
+        return new UserResponseType{ id = user.id, username = user.username };
     }
 }

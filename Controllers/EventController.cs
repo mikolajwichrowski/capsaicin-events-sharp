@@ -19,18 +19,18 @@ public class EventController : ControllerBase
     [HttpGet(Name = "GetEvents")]
     public IEnumerable<EventResponseType> List()
     {
-        IEnumerable<Event> events;
+        IEnumerable<EventResponseType> events;
         using (var context = new AppContext())
         {
             events = context.Events
                 .Include(row => row.creator)
+                .ToList()
                 .ConvertAll(row => new EventResponseType{
-                    creator = new UserResponseType{id=creator.id, username=creator.username},
+                    creator = new UserResponseType{id=row.creator.id, username=row.creator.username},
                     description = row.description,
                     picture = row.picture,
                     location = row.location,
-                })
-                .ToList();
+                });
         }
         return events;
     }

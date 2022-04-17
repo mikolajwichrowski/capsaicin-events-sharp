@@ -16,7 +16,7 @@ public class AuthenticateController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<UserReturnType?> Post([FromBody] AuthenticationRequestType? AuthenticationRequestType)
+    public ActionResult<UserResponseType?> Post([FromBody] AuthenticationRequestType? AuthenticationRequestType)
     {
         if(AuthenticationRequestType == null) {
             return BadRequest();
@@ -46,6 +46,6 @@ public class AuthenticateController : ControllerBase
             new Microsoft.AspNetCore.Http.CookieOptions()
         );
 
-        return new UserReturnType{ id = user.id, username = user.username };
+        return new UserResponseType{ id = user.id, username = user.username };
     }
 }
