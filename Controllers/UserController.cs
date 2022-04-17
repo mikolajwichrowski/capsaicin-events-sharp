@@ -5,8 +5,8 @@ namespace capsaicin_events_sharp.Controllers;
 
 public class UserReturnType
 {
-    public int? id { get;set;}
-    public string? username { get;set;}
+    public int id { get;set; } = 0;
+    public string username { get;set; } = "";
 }
 
 
