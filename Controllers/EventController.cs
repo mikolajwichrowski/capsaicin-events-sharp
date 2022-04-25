@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
 using capsaicin_events_sharp.Entities;
 
 namespace capsaicin_events_sharp.Controllers;
@@ -36,12 +37,13 @@ public class EventController : ControllerBase
     }
 
     [HttpPost]
-    public Event Post([FromBody] EventRequestType eventRequest)
+    public Event Post([FromBody] EventRequestType eventRequest, HttpContext context)
     {
+        int userId = int.Parse(context.Request.Cookies["user_id"]);
         Event newEvent;
         using (var context = new AppContext())
         {
-            User creator = context.Users.Where(user => user.id == eventRequest.creator).First();
+            User creator = context.Users.Where(user => user.id == userId).First();
             newEvent = new Event{
                 creator=creator,
                 description=eventRequest.description,
@@ -98,5 +100,107 @@ public class EventController : ControllerBase
         }
 
         return attendee;
+    }
+
+    [Route(":id/files")]
+    [HttpGet(Name = "GetAttendees")]
+    public IEnumerable<EventFileResponseType> ListEventFiles()
+    {
+        IEnumerable<EventFileResponseType> eventFiles;
+
+        using (var context = new AppContext())
+        {
+            eventFiles = context.EventFiles
+                .ToList()
+                .ConvertAll(row => new EventFileResponseType{
+                    id = row.id,
+                    @event = row.@event.id,
+                    fileLocation = row.fileLocation
+                });
+        }
+
+        return eventFiles;
+    }
+
+    [HttpPost(Name="Upload"), DisableRequestSizeLimit]
+    [Route("{id:int}/upload")]
+    public EventFileResponseType Upload(int id)
+    {
+        EventFileResponseType eventFile;
+        var file = Request.Form.Files[0];
+        var folderName = Path.Combine("Resources", "Images");
+        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+        if (file.Length > 0)
+        {
+            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fullPath = Path.Combine(pathToSave, fileName);
+            var dbPath = Path.Combine(folderName, fileName);
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            using (var context = new AppContext()) {
+                Event @event = context.Events.Where(@event => @event.id == id).First();
+                EventFile newFile = new EventFile{
+                    @event=@event,
+                    fileLocation = dbPath
+                };
+                context.EventFiles.Add(newFile);
+                context.SaveChanges();
+                eventFile = new EventFileResponseType{
+                    id = newFile.id,
+                    @event = newFile.@event.id,
+                    fileLocation = newFile.fileLocation
+                };
+            }
+            return eventFile;
+        }
+
+        throw new BadHttpRequestException("Internal error");
+    }
+
+    [Route("{id:int}/react")]
+    [HttpPost(Name="CreateReaction")]
+    public void CreateReaction([FromBody] EventRequestType eventRequest, HttpContext context)
+    {
+        // TODO: make a reaction
+        int userId = int.Parse(context.Request.Cookies["user_id"]);
+        // Event newEvent;
+        // using (var context = new AppContext())
+        // {
+        //     User creator = context.Users.Where(user => user.id == userId).First();
+        //     newEvent = new Event{
+        //         creator=creator,
+        //         description=eventRequest.description,
+        //         picture=eventRequest.picture,
+        //         location=eventRequest.location
+        //     };
+        //     context.Events.Add(newEvent);
+        //     context.SaveChanges();
+        // }
+        // return newEvent;
+    }
+
+    [Route("{id:int}/react")]
+    [HttpGet(Name="ListReactions")]
+    public void ListReactions([FromBody] EventRequestType eventRequest, HttpContext context)
+    {
+        // TODO: get all reactions
+        int userId = int.Parse(context.Request.Cookies["user_id"]);
+        // Event newEvent;
+        // using (var context = new AppContext())
+        // {
+        //     User creator = context.Users.Where(user => user.id == userId).First();
+        //     newEvent = new Event{
+        //         creator=creator,
+        //         description=eventRequest.description,
+        //         picture=eventRequest.picture,
+        //         location=eventRequest.location
+        //     };
+        //     context.Events.Add(newEvent);
+        //     context.SaveChanges();
+        // }
+        // return newEvent;
     }
 }

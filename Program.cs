@@ -20,6 +20,8 @@ app.UseMiddleware<capsaicin_events_sharp.Middleware>();
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.UseAuthorization();
 
 app.MapControllers();
