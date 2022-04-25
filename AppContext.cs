@@ -13,6 +13,8 @@ public class AppContext : DbContext
 
     public DbSet<Event> Events { get; set; }
 
+    public DbSet<Attendee> Attendees { get; set; }
+
     public string DbPath { get; } = "./dev.sqlite";
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)

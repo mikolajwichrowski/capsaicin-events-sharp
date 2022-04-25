@@ -53,4 +53,50 @@ public class EventController : ControllerBase
         }
         return newEvent;
     }
+
+    [Route(":id/attendees")]
+    [HttpGet(Name = "GetAttendees")]
+    public IEnumerable<AttendeeResponseType> ListAttendees()
+    {
+        IEnumerable<AttendeeResponseType> attendees;
+
+        using (var context = new AppContext())
+        {
+            attendees = context.Attendees
+                .Include(row => row.user)
+                .ToList()
+                .ConvertAll(row => new AttendeeResponseType{
+                    id = row.id,
+                    user = new UserResponseType{ id=row.user.id, username=row.user.username }
+                });
+        }
+
+        return attendees;
+    }
+
+    [Route("{id:int}/register")]
+    [HttpGet(Name = "PostAttendees")]
+    public AttendeeResponseType PostAttendees(int id, [FromBody] AttendeeRequestType attendeeRequest)
+    {
+        AttendeeResponseType attendee;
+
+        using (var context = new AppContext())
+        {
+
+            User user = context.Users.Where(user => user.id == attendeeRequest.user).First();
+            Event @event = context.Events.Where(@event => @event.id == id).First();
+            Attendee newAttendee = new Attendee{
+                user = user,
+                @event = @event
+            };
+            context.Attendees.Add(newAttendee);
+            context.SaveChanges();
+            attendee = new AttendeeResponseType{
+                id = newAttendee.id,
+                user = new UserResponseType{ id=newAttendee.user.id, username=newAttendee.user.username }
+            };
+        }
+
+        return attendee;
+    }
 }

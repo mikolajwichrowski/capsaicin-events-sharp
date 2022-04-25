@@ -8,4 +8,13 @@
 6. Create user controller and entity and run `dotnet ef migrations add InitialCreate` and `dotnet ef database update` to create the db
 7. Create the authentication controller to allow login using cookies https://docs.microsoft.com/en-us/aspnet/core/security/samesite?view=aspnetcore-6.0
 8. Create authorization policy to make sure cookies are set https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies?view=aspnetcore-3.1#apply-policies-to-mvc-controllers
+
 ---
+# 1 Event creation
+1. Create event entity
+2. Create event controller and types
+
+---
+# 2 Adding attendees
+1. Create attendee entity. (event is een gereserveerd keyword)
+2. Create attendee controller and types
