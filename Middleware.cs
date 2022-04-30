@@ -32,6 +32,10 @@ public class Middleware {
                 user = dbContext.Users.Find(userIdInt);
             }   
         }
+        catch(Exception error) {
+            Console.Write(error);
+            throw new UnauthorizedAccessException();
+        }
         finally {
             if(user != null) {
                 await this.next(context);

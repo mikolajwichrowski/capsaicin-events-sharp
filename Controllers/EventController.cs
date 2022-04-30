@@ -37,9 +37,9 @@ public class EventController : ControllerBase
     }
 
     [HttpPost]
-    public Event Post([FromBody] EventRequestType eventRequest, HttpContext httpContext)
+    public Event Post([FromBody] EventRequestType eventRequest)
     {
-        int userId = int.Parse(httpContext.Request.Cookies["user_id"]);
+        int userId = int.Parse(HttpContext.Request.Cookies["user_id"]);
         Event newEvent;
         using (var context = new AppContext())
         {
@@ -58,7 +58,7 @@ public class EventController : ControllerBase
 
     [Route(":id/attendees")]
     [HttpGet(Name = "GetAttendees")]
-    public IEnumerable<AttendeeResponseType> ListAttendees(int id)
+    public IEnumerable<AttendeeResponseType> ListAttendees([FromRoute] int id)
     {
         IEnumerable<AttendeeResponseType> attendees;
 
@@ -79,7 +79,7 @@ public class EventController : ControllerBase
 
     [Route("{id:int}/register")]
     [HttpGet(Name = "PostAttendees")]
-    public AttendeeResponseType PostAttendees(int id, [FromBody] AttendeeRequestType attendeeRequest)
+    public AttendeeResponseType PostAttendees([FromRoute] int id, [FromBody] AttendeeRequestType attendeeRequest)
     {
         AttendeeResponseType attendee;
 
@@ -105,7 +105,7 @@ public class EventController : ControllerBase
 
     [Route(":id/files")]
     [HttpGet(Name = "GetAttendees")]
-    public IEnumerable<EventFileResponseType> ListEventFiles(int id)
+    public IEnumerable<EventFileResponseType> ListEventFiles([FromRoute] int id)
     {
         IEnumerable<EventFileResponseType> eventFiles;
 
@@ -126,7 +126,7 @@ public class EventController : ControllerBase
 
     [HttpPost(Name="Upload"), DisableRequestSizeLimit]
     [Route("{id:int}/upload")]
-    public EventFileResponseType Upload(int id)
+    public EventFileResponseType Upload([FromRoute] int id)
     {
         EventFileResponseType eventFile;
         var file = Request.Form.Files[0];
@@ -164,9 +164,9 @@ public class EventController : ControllerBase
 
     [Route("{id:int}/react")]
     [HttpPost(Name="CreateReaction")]
-    public ReactionResponseType CreateReaction(int id, [FromBody] ReactionRequestType reactionRequest, HttpContext httpContext)
+    public ReactionResponseType CreateReaction([FromRoute] int id, [FromBody] ReactionRequestType reactionRequest)
     {
-        int userId = int.Parse(httpContext.Request.Cookies["user_id"]);
+        int userId = int.Parse(HttpContext.Request.Cookies["user_id"]);
         Reaction newReaction;
         using (var context = new AppContext())
         {
@@ -198,7 +198,7 @@ public class EventController : ControllerBase
 
     [Route("{id:int}/reactions")]
     [HttpGet(Name="ListReactions")]
-    public IEnumerable<ReactionResponseType> ListReactions(int id, [FromBody] EventRequestType eventRequest)
+    public IEnumerable<ReactionResponseType> ListReactions([FromRoute] int id, [FromBody] EventRequestType eventRequest)
     { 
         IEnumerable<ReactionResponseType> eventReactions;
         using (var context = new AppContext())
