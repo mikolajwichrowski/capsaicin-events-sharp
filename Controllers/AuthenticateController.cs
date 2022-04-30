@@ -5,8 +5,8 @@ namespace capsaicin_events_sharp.Controllers;
 
 
 [ApiController]
-[Route("[controller]")]
-public class AuthenticateController : ControllerBase
+[Route("/api/[controller]")]
+public class AuthenticateController : Controller
 {
     private readonly ILogger<UserController> _logger;
 

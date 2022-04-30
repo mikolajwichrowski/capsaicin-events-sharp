@@ -7,8 +7,8 @@ namespace capsaicin_events_sharp.Controllers;
 
 
 [ApiController]
-[Route("[controller]")]
-public class EventController : ControllerBase
+[Route("/api/[controller]")]
+public class EventController : Controller
 {
     private readonly ILogger<EventController> _logger;
 
@@ -17,7 +17,7 @@ public class EventController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetEvents")]
+    [HttpGet]
     public IEnumerable<EventResponseType> List()
     {
         IEnumerable<EventResponseType> events;
@@ -37,7 +37,7 @@ public class EventController : ControllerBase
     }
 
     [HttpPost]
-    public Event Post([FromBody] EventRequestType eventRequest)
+    public EventResponseType Post([FromBody] EventRequestType eventRequest)
     {
         int userId = int.Parse(HttpContext.Request.Cookies["user_id"]);
         Event newEvent;
@@ -53,11 +53,19 @@ public class EventController : ControllerBase
             context.Events.Add(newEvent);
             context.SaveChanges();
         }
-        return newEvent;
+        return new EventResponseType{
+            creator=new UserResponseType{
+                id=newEvent.user.id,
+                id=newEvent.user.id,
+            },
+            description=newEvent.description,
+            picture=newEvent.picture,
+            location=newEvent.location
+        };
     }
 
-    [Route(":id/attendees")]
-    [HttpGet(Name = "GetAttendees")]
+    
+    [HttpGet(":id/attendees")]
     public IEnumerable<AttendeeResponseType> ListAttendees([FromRoute] int id)
     {
         IEnumerable<AttendeeResponseType> attendees;
@@ -77,8 +85,7 @@ public class EventController : ControllerBase
         return attendees;
     }
 
-    [Route("{id:int}/register")]
-    [HttpGet(Name = "PostAttendees")]
+    [HttpPost("{id:int}/register")]
     public AttendeeResponseType PostAttendees([FromRoute] int id, [FromBody] AttendeeRequestType attendeeRequest)
     {
         AttendeeResponseType attendee;
@@ -103,8 +110,7 @@ public class EventController : ControllerBase
         return attendee;
     }
 
-    [Route(":id/files")]
-    [HttpGet(Name = "GetAttendees")]
+    [HttpGet(":id/files")]
     public IEnumerable<EventFileResponseType> ListEventFiles([FromRoute] int id)
     {
         IEnumerable<EventFileResponseType> eventFiles;
@@ -124,8 +130,7 @@ public class EventController : ControllerBase
         return eventFiles;
     }
 
-    [HttpPost(Name="Upload"), DisableRequestSizeLimit]
-    [Route("{id:int}/upload")]
+    [HttpPost("{id:int}/upload")]
     public EventFileResponseType Upload([FromRoute] int id)
     {
         EventFileResponseType eventFile;
@@ -162,8 +167,7 @@ public class EventController : ControllerBase
         throw new BadHttpRequestException("Internal error");
     }
 
-    [Route("{id:int}/react")]
-    [HttpPost(Name="CreateReaction")]
+    [HttpPost("{id:int}/react")]
     public ReactionResponseType CreateReaction([FromRoute] int id, [FromBody] ReactionRequestType reactionRequest)
     {
         int userId = int.Parse(HttpContext.Request.Cookies["user_id"]);
@@ -196,8 +200,7 @@ public class EventController : ControllerBase
         };
     }
 
-    [Route("{id:int}/reactions")]
-    [HttpGet(Name="ListReactions")]
+    [HttpGet("{id:int}/reactions")]
     public IEnumerable<ReactionResponseType> ListReactions([FromRoute] int id, [FromBody] EventRequestType eventRequest)
     { 
         IEnumerable<ReactionResponseType> eventReactions;

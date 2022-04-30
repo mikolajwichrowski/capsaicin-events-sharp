@@ -4,8 +4,8 @@ using capsaicin_events_sharp.Entities;
 namespace capsaicin_events_sharp.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class UserController : ControllerBase
+[Route("/api/[controller]")]
+public class UserController : Controller
 {
     private readonly ILogger<UserController> _logger;
 
