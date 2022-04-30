@@ -17,4 +17,13 @@
 ---
 # 2 Adding attendees
 1. Create attendee entity. (event is een gereserveerd keyword)
-2. Create attendee controller and types
+2. Add attendee to event controller and create types
+
+---
+# 3 Attending an event
+1. Create reaction entity.
+2. Add reaction to event controller and create types
+
+---
+# 4 Attending an event
+1. Extend reaction with comment option

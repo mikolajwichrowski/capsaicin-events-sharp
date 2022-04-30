@@ -37,9 +37,9 @@ public class EventController : ControllerBase
     }
 
     [HttpPost]
-    public Event Post([FromBody] EventRequestType eventRequest, HttpContext context)
+    public Event Post([FromBody] EventRequestType eventRequest, HttpContext httpContext)
     {
-        int userId = int.Parse(context.Request.Cookies["user_id"]);
+        int userId = int.Parse(httpContext.Request.Cookies["user_id"]);
         Event newEvent;
         using (var context = new AppContext())
         {
@@ -58,7 +58,7 @@ public class EventController : ControllerBase
 
     [Route(":id/attendees")]
     [HttpGet(Name = "GetAttendees")]
-    public IEnumerable<AttendeeResponseType> ListAttendees()
+    public IEnumerable<AttendeeResponseType> ListAttendees(int id)
     {
         IEnumerable<AttendeeResponseType> attendees;
 
@@ -66,6 +66,7 @@ public class EventController : ControllerBase
         {
             attendees = context.Attendees
                 .Include(row => row.user)
+                .Where(@event => @event.id == id)
                 .ToList()
                 .ConvertAll(row => new AttendeeResponseType{
                     id = row.id,
@@ -104,13 +105,14 @@ public class EventController : ControllerBase
 
     [Route(":id/files")]
     [HttpGet(Name = "GetAttendees")]
-    public IEnumerable<EventFileResponseType> ListEventFiles()
+    public IEnumerable<EventFileResponseType> ListEventFiles(int id)
     {
         IEnumerable<EventFileResponseType> eventFiles;
 
         using (var context = new AppContext())
         {
             eventFiles = context.EventFiles
+                .Where(@event => @event.id == id)
                 .ToList()
                 .ConvertAll(row => new EventFileResponseType{
                     id = row.id,
@@ -162,45 +164,62 @@ public class EventController : ControllerBase
 
     [Route("{id:int}/react")]
     [HttpPost(Name="CreateReaction")]
-    public void CreateReaction([FromBody] EventRequestType eventRequest, HttpContext context)
+    public ReactionResponseType CreateReaction(int id, [FromBody] ReactionRequestType reactionRequest, HttpContext httpContext)
     {
-        // TODO: make a reaction
-        int userId = int.Parse(context.Request.Cookies["user_id"]);
-        // Event newEvent;
-        // using (var context = new AppContext())
-        // {
-        //     User creator = context.Users.Where(user => user.id == userId).First();
-        //     newEvent = new Event{
-        //         creator=creator,
-        //         description=eventRequest.description,
-        //         picture=eventRequest.picture,
-        //         location=eventRequest.location
-        //     };
-        //     context.Events.Add(newEvent);
-        //     context.SaveChanges();
-        // }
-        // return newEvent;
+        int userId = int.Parse(httpContext.Request.Cookies["user_id"]);
+        Reaction newReaction;
+        using (var context = new AppContext())
+        {
+            User user = context.Users.Where(user => user.id == userId).First();
+            Event @event = context.Events.Where(@event => @event.id == id).First();
+            newReaction = new Reaction{
+                user=user,
+                @event=@event,
+                type=reactionRequest.type,
+                message=reactionRequest.message,
+                availibilityDate=reactionRequest.availibilityDate
+            };
+            context.Reactions.Add(newReaction);
+            context.SaveChanges();
+        }
+        return new ReactionResponseType{
+            id=newReaction.id,
+            @event=newReaction.@event.id,
+            availibilityDate=newReaction.availibilityDate,
+            createdAt=newReaction.createdAt,
+            message=newReaction.message,
+            type=newReaction.type,
+            user=new UserResponseType{
+                id=newReaction.user.id,
+                username=newReaction.user.username
+            }
+        };
     }
 
-    [Route("{id:int}/react")]
+    [Route("{id:int}/reactions")]
     [HttpGet(Name="ListReactions")]
-    public void ListReactions([FromBody] EventRequestType eventRequest, HttpContext context)
-    {
-        // TODO: get all reactions
-        int userId = int.Parse(context.Request.Cookies["user_id"]);
-        // Event newEvent;
-        // using (var context = new AppContext())
-        // {
-        //     User creator = context.Users.Where(user => user.id == userId).First();
-        //     newEvent = new Event{
-        //         creator=creator,
-        //         description=eventRequest.description,
-        //         picture=eventRequest.picture,
-        //         location=eventRequest.location
-        //     };
-        //     context.Events.Add(newEvent);
-        //     context.SaveChanges();
-        // }
-        // return newEvent;
+    public IEnumerable<ReactionResponseType> ListReactions(int id, [FromBody] EventRequestType eventRequest)
+    { 
+        IEnumerable<ReactionResponseType> eventReactions;
+        using (var context = new AppContext())
+        {
+            eventReactions = context.Reactions
+                .Where(@event => @event.id == id)
+                .Include(row => row.user)
+                .ToList()
+                .ConvertAll(row => new ReactionResponseType{
+                    id=row.id,
+                    @event=row.@event.id,
+                    availibilityDate=row.availibilityDate,
+                    createdAt=row.createdAt,
+                    message=row.message,
+                    type=row.type,
+                    user=new UserResponseType{
+                        id=row.user.id,
+                        username=row.user.username
+                    }
+                });
+        }
+        return eventReactions;
     }
 }

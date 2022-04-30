@@ -22,7 +22,7 @@ public class Reaction
     public Event @event { get; set; }
 
     [MaxLength(255)]
-    public int type { get; set; }
+    public string type { get; set; }
 
     [MaxLength(4000)]
     public string message { 
