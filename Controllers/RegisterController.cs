@@ -17,10 +17,10 @@ public class RegisterController : ControllerBase
 
   
     [HttpPost]
-    public ActionResult<UserResponseType?> Post([FromBody] AuthenticationRequestType? authenticationBody)
+    public UserResponseType Post([FromBody] AuthenticationRequestType? authenticationBody)
     {
         if(authenticationBody == null) {
-            return BadRequest();
+            throw new BadHttpRequestException("Missing data");
         }
 
         User user;
@@ -32,7 +32,7 @@ public class RegisterController : ControllerBase
         }
 
         if(user == null){
-            return Unauthorized();
+            throw new Exception("Cannot create user");
         }
 
         Response.Cookies.Append(

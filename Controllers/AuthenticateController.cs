@@ -16,22 +16,24 @@ public class AuthenticateController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<UserResponseType?> Post([FromBody] AuthenticationRequestType? AuthenticationRequestType)
+    public UserResponseType Post([FromBody] AuthenticationRequestType? authenticationBody)
     {
-        if(AuthenticationRequestType == null) {
-            return BadRequest();
+        if(authenticationBody == null) {
+            throw new BadHttpRequestException("Missing data");
         }
 
         User? user = null;
         using (var context = new AppContext())
         {
             try {
-              user = context.Users.Where(row => row.username == AuthenticationRequestType.username && row.password == AuthenticationRequestType.password).First();
-            } catch {}   
+              user = context.Users.Where(row => row.username == authenticationBody.username && row.password == authenticationBody.password).First();
+            } catch {
+                throw new Exception("Cannot find user");
+            }   
         }
 
         if(user == null) {
-            return Unauthorized();
+            throw new UnauthorizedAccessException();
         }
 
         

@@ -5,10 +5,10 @@ using capsaicin_events_sharp.Entities;
 namespace capsaicin_events_sharp;
 
 public class Middleware {
-    private readonly RequestDelegate next;
-
-    public Middleware(RequestDelegate next) {
-        this.next = next;
+    private readonly RequestDelegate _next;       
+    public Middleware(RequestDelegate next)
+    {
+        _next = next;
     }
 
     public async Task Invoke(HttpContext context) {
@@ -17,10 +17,9 @@ public class Middleware {
         bool isAuthenticate = route.Contains("authenticate");
 
         if(isRegister || isAuthenticate) {
-            await this.next(context);
+            await _next.Invoke(context);
             return;
         }
-
         
         User? user = null;
         try {
@@ -33,13 +32,19 @@ public class Middleware {
             }   
         }
         catch(Exception error) {
-            Console.Write(error);
-            throw new UnauthorizedAccessException();
+            Console.WriteLine(error);
+            context.Response.StatusCode = 403;
+            await context.Response.WriteAsync("Unauthorized");
+            return;
         }
-        finally {
-            if(user != null) {
-                await this.next(context);
-            }
+        
+        if(user != null) {
+            await _next.Invoke(context);
+            return;
+        } else {
+            context.Response.StatusCode = 403;
+            await context.Response.WriteAsync("Unauthorized");
+            return;
         }
     }
 }
