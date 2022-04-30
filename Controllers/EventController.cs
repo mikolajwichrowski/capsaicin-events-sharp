@@ -55,8 +55,8 @@ public class EventController : Controller
         }
         return new EventResponseType{
             creator=new UserResponseType{
-                id=newEvent.user.id,
-                id=newEvent.user.id,
+                id=newEvent.creator.id,
+                username=newEvent.creator.username,
             },
             description=newEvent.description,
             picture=newEvent.picture,
