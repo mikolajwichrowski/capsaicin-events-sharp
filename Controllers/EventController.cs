@@ -27,6 +27,7 @@ public class EventController : Controller
                 .Include(row => row.creator)
                 .ToList()
                 .ConvertAll(row => new EventResponseType{
+                    id=row.id,
                     creator = new UserResponseType{ id=row.creator.id, username=row.creator.username },
                     description = row.description,
                     picture = row.picture,
@@ -54,6 +55,7 @@ public class EventController : Controller
             context.SaveChanges();
         }
         return new EventResponseType{
+            id=newEvent.id,
             creator=new UserResponseType{
                 id=newEvent.creator.id,
                 username=newEvent.creator.username,
@@ -65,7 +67,7 @@ public class EventController : Controller
     }
 
     
-    [HttpGet(":id/attendees")]
+    [HttpGet("{id:int}/attendees")]
     public IEnumerable<AttendeeResponseType> ListAttendees([FromRoute] int id)
     {
         IEnumerable<AttendeeResponseType> attendees;
@@ -170,8 +172,13 @@ public class EventController : Controller
     [HttpPost("{id:int}/react")]
     public ReactionResponseType CreateReaction([FromRoute] int id, [FromBody] ReactionRequestType reactionRequest)
     {
+        if(reactionRequest.type != "COMMENT" && reactionRequest.type != "AVAILIBILITY") {
+            throw new Exception("Invalid reaction type: " + reactionRequest.type);
+        }
+
         int userId = int.Parse(HttpContext.Request.Cookies["user_id"]);
         Reaction newReaction;
+
         using (var context = new AppContext())
         {
             User user = context.Users.Where(user => user.id == userId).First();
@@ -186,6 +193,7 @@ public class EventController : Controller
             context.Reactions.Add(newReaction);
             context.SaveChanges();
         }
+
         return new ReactionResponseType{
             id=newReaction.id,
             @event=newReaction.@event.id,

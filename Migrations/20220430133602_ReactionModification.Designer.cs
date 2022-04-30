@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using capsaicin_events_sharp;
 
@@ -10,9 +11,10 @@ using capsaicin_events_sharp;
 namespace capsaicin_events_sharp.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20220430133602_ReactionModification")]
+    partial class ReactionModification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.4");

@@ -2,6 +2,7 @@
 
 #pragma warning disable CS8618
 
+using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -25,33 +26,12 @@ public class Reaction
     public string type { get; set; }
 
     [MaxLength(4000)]
-    public string message { 
-        get
-        {
-            return this.message;
-        } 
-
-        set 
-        {
-            if(this.message != "COMMENT" || this.message != "AVAILIBILITY") {
-                throw new Exception("Invalid message type");
-            }
-        }
-    }
+    public string? message { get; set; }
 
     
-    public DateTime availibilityDate { get; set; }
+    public DateTime? availibilityDate { get; set; }
 
-    public DateTime? createdAt { 
-        get
-        {
-            return this.createdAt.HasValue
-                ? this.createdAt.Value
-                : DateTime.Now;
-        }
-
-        set { this.createdAt = value; }
-     }
+    public DateTime? createdAt { get; set; } = DateTime.Now;
 }
 
 
