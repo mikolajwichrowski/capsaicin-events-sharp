@@ -112,7 +112,7 @@ public class EventController : Controller
         return attendee;
     }
 
-    [HttpGet(":id/files")]
+    [HttpGet("{id:int}/files")]
     public IEnumerable<EventFileResponseType> ListEventFiles([FromRoute] int id)
     {
         IEnumerable<EventFileResponseType> eventFiles;
@@ -120,7 +120,8 @@ public class EventController : Controller
         using (var context = new AppContext())
         {
             eventFiles = context.EventFiles
-                .Where(@event => @event.id == id)
+                .Include(row => row.@event)
+                .Where(row => row.@event.id == id)
                 .ToList()
                 .ConvertAll(row => new EventFileResponseType{
                     id = row.id,
@@ -133,17 +134,16 @@ public class EventController : Controller
     }
 
     [HttpPost("{id:int}/upload")]
-    public EventFileResponseType Upload([FromRoute] int id)
+    public EventFileResponseType Upload([FromRoute] int id, IFormFile file)
     {
         EventFileResponseType eventFile;
-        var file = Request.Form.Files[0];
-        var folderName = Path.Combine("Resources", "Images");
+        var folderName = "uploads";
         var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
         if (file.Length > 0)
         {
             var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fullPath = Path.Combine(pathToSave, fileName);
-            var dbPath = Path.Combine(folderName, fileName);
+            var dbPath = "/" + Path.Combine(folderName, fileName);
             using (var stream = new FileStream(fullPath, FileMode.Create))
             {
                 file.CopyTo(stream);
@@ -209,14 +209,15 @@ public class EventController : Controller
     }
 
     [HttpGet("{id:int}/reactions")]
-    public IEnumerable<ReactionResponseType> ListReactions([FromRoute] int id, [FromBody] EventRequestType eventRequest)
+    public IEnumerable<ReactionResponseType> ListReactions([FromRoute] int id)
     { 
         IEnumerable<ReactionResponseType> eventReactions;
         using (var context = new AppContext())
         {
             eventReactions = context.Reactions
-                .Where(@event => @event.id == id)
                 .Include(row => row.user)
+                .Include(row => row.@event)
+                .Where(row => row.@event.id == id)
                 .ToList()
                 .ConvertAll(row => new ReactionResponseType{
                     id=row.id,

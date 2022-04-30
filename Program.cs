@@ -1,3 +1,5 @@
+using Microsoft.Extensions.FileProviders;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,8 +18,16 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseMiddleware<capsaicin_events_sharp.Middleware>();
+var folderName = "uploads";
+var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+app.UseFileServer(new FileServerOptions
+{    
+    FileProvider = new PhysicalFileProvider(
+           pathToSave),
+    RequestPath = "/uploads",
+    EnableDirectoryBrowsing = true
+});
 
-// app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
