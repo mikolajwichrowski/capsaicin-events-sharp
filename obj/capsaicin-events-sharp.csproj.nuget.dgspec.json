@@ -71,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/tmp/dotnet/sdk/6.0.202/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/tmp/dotnet/sdk/6.0.300/RuntimeIdentifierGraph.json"
         }
       }
     }

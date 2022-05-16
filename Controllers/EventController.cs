@@ -16,6 +16,7 @@ public class EventController : Controller
     {
         _logger = logger;
     }
+    
 
     [HttpGet]
     public IEnumerable<EventResponseType> List()
@@ -76,7 +77,8 @@ public class EventController : Controller
         {
             attendees = context.Attendees
                 .Include(row => row.user)
-                .Where(@event => @event.id == id)
+                .Include(row => row.@event)
+                .Where(attendee => attendee.@event.id == id)
                 .ToList()
                 .ConvertAll(row => new AttendeeResponseType{
                     id = row.id,
@@ -94,7 +96,6 @@ public class EventController : Controller
 
         using (var context = new AppContext())
         {
-
             User user = context.Users.Where(user => user.id == attendeeRequest.user).First();
             Event @event = context.Events.Where(@event => @event.id == id).First();
             Attendee newAttendee = new Attendee{
@@ -233,5 +234,17 @@ public class EventController : Controller
                 });
         }
         return eventReactions;
+    }
+
+    [HttpDelete("{id:int}")]
+    public ActionResult<string> DeleteEvent([FromRoute] int id)
+    {
+        using (var context = new AppContext())
+        {               
+            Event @event = context.Events.Where(@event => @event.id == id).First();
+            context.Remove(@event);
+            context.SaveChanges();
+        }
+        return "Deleted";
     }
 }
