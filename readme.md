@@ -50,7 +50,7 @@ documentation and generates all the requests for you. This makes life a bit easi
 The swagger documentation is still in the making and needs some more information but all the 
 requests with payload are already defined. You can find it on `http://localhost:5199/swagger`
 
-Start with the register and login endpoint. This will give you the required cookies you need on each request.
+Start with the `register` and `login` endpoint. This will give you the required cookies you need on each request.
 Then you can create events with a post on the `event` endpoint and add a picture in a string format. 
 Then you can add other attendees to an event with the `attendees` endpoint on an event.
 Finally you can leave comments and availibility dates on the `react` endpoint.
