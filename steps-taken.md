@@ -10,23 +10,29 @@
 
 ---
 
-# 1 Event creation
-1. Create event entity
-2. Create event controller and types
+# 1 Event creation.
+1. Create event entity.
+2. Create event controller and types.
 
 ---
 
 # 2 Adding attendees
 1. Create attendee entity. (event is een gereserveerd keyword)
-2. Add attendee to event controller and create types
+2. Add attendee to event controller and create types.
 
 ---
 
 # 3 Attending an event
 1. Create reaction entity.
-2. Add reaction to event controller and create types
+2. Add reaction to event controller and create types.
 
 ---
 
 # 4 Attending an event
-1. Extend reaction with comment option
+1. Extend reaction with comment option.
+
+--
+
+# 5 Refinements
+1. Refine code.
+2. Make exceptions always be represented as json. 
