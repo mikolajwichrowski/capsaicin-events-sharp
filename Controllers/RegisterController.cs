@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using capsaicin_events_sharp.Entities;
+using System.Net;
 
 namespace capsaicin_events_sharp.Controllers;
 
@@ -20,7 +21,7 @@ public class RegisterController : Controller
     public UserResponseType Post([FromBody] AuthenticationRequestType? authenticationBody)
     {
         if(authenticationBody == null) {
-            throw new BadHttpRequestException("Missing data");
+            throw new HttpError("Missing data", HttpStatusCode.BadRequest);
         }
 
         User user;
@@ -32,7 +33,7 @@ public class RegisterController : Controller
         }
 
         if(user == null){
-            throw new Exception("Cannot create user");
+            throw new HttpError("Cannot create user", HttpStatusCode.InternalServerError);
         }
 
         Response.Cookies.Append(

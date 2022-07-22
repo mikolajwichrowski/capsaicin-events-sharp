@@ -1,14 +1,8 @@
-
-
 #pragma warning disable CS8618
 
-using System.ComponentModel;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace capsaicin_events_sharp.Entities;
-
 
 public class Reaction
 {
@@ -28,10 +22,10 @@ public class Reaction
     [MaxLength(4000)]
     public string? message { get; set; }
 
-    
     public DateTime? availibilityDate { get; set; }
 
     public DateTime? createdAt { get; set; } = DateTime.Now;
+    
 }
 
 

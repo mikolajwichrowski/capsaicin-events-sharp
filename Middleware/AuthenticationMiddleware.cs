@@ -1,12 +1,13 @@
 #pragma warning disable CS8602
 
 using capsaicin_events_sharp.Entities;
+using System.Net;
 
 namespace capsaicin_events_sharp;
 
-public class Middleware {
+public class AuthenticationMiddleware {
     private readonly RequestDelegate _next;       
-    public Middleware(RequestDelegate next)
+    public AuthenticationMiddleware(RequestDelegate next)
     {
         _next = next;
     }
@@ -31,20 +32,15 @@ public class Middleware {
                 user = dbContext.Users.Find(userIdInt);
             }   
         }
-        catch(Exception error) {
-            Console.WriteLine(error);
-            context.Response.StatusCode = 403;
-            await context.Response.WriteAsync("Unauthorized");
-            return;
+        catch(Exception) {
+            throw new HttpError("Unauthorized", HttpStatusCode.Unauthorized);
         }
         
         if(user != null) {
             await _next.Invoke(context);
             return;
         } else {
-            context.Response.StatusCode = 403;
-            await context.Response.WriteAsync("Unauthorized");
-            return;
+            throw new HttpError("Unauthorized", HttpStatusCode.Unauthorized);
         }
     }
 }

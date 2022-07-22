@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using capsaicin_events_sharp.Entities;
+using System.Net;
 
 namespace capsaicin_events_sharp.Controllers;
 
@@ -19,7 +20,7 @@ public class AuthenticateController : Controller
     public UserResponseType Post([FromBody] AuthenticationRequestType? authenticationBody)
     {
         if(authenticationBody == null) {
-            throw new BadHttpRequestException("Missing data");
+            throw new HttpError("Missing data", HttpStatusCode.BadRequest);
         }
 
         User? user = null;
@@ -28,12 +29,12 @@ public class AuthenticateController : Controller
             try {
               user = context.Users.Where(row => row.username == authenticationBody.username && row.password == authenticationBody.password).First();
             } catch {
-                throw new Exception("Cannot find user");
+                throw new HttpError("User does not exist", HttpStatusCode.Unauthorized);
             }   
         }
 
         if(user == null) {
-            throw new UnauthorizedAccessException();
+            throw new HttpError("Unathorized", HttpStatusCode.Unauthorized);
         }
 
         

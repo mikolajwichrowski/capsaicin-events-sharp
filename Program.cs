@@ -17,9 +17,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseMiddleware<capsaicin_events_sharp.Middleware>();
+app.UseMiddleware<capsaicin_events_sharp.AuthenticationMiddleware>();
+app.UseMiddleware<capsaicin_events_sharp.ExceptionMiddleware>();
+
 var folderName = "uploads";
 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
 app.UseFileServer(new FileServerOptions
 {    
     FileProvider = new PhysicalFileProvider(

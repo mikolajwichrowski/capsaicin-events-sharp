@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using capsaicin_events_sharp.Entities;
 
 namespace capsaicin_events_sharp.Controllers;
 

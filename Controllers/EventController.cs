@@ -1,6 +1,10 @@
+#pragma warning disable CS8602
+#pragma warning disable CS8604
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
+using System.Net;
 using capsaicin_events_sharp.Entities;
 
 namespace capsaicin_events_sharp.Controllers;
@@ -167,14 +171,14 @@ public class EventController : Controller
             return eventFile;
         }
 
-        throw new BadHttpRequestException("Internal error");
+        throw new HttpError("Bad request", HttpStatusCode.BadRequest);
     }
 
     [HttpPost("{id:int}/react")]
     public ReactionResponseType CreateReaction([FromRoute] int id, [FromBody] ReactionRequestType reactionRequest)
     {
         if(reactionRequest.type != "COMMENT" && reactionRequest.type != "AVAILIBILITY") {
-            throw new Exception("Invalid reaction type: " + reactionRequest.type);
+            throw new HttpError("Invalid reaction type: " + reactionRequest.type, HttpStatusCode.BadRequest);
         }
 
         int userId = int.Parse(HttpContext.Request.Cookies["user_id"]);
@@ -245,6 +249,6 @@ public class EventController : Controller
             context.Remove(@event);
             context.SaveChanges();
         }
-        return "Deleted";
+        return Ok("Deleted");
     }
 }

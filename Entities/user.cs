@@ -1,6 +1,5 @@
 #pragma warning disable CS8618
 
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,6 +16,7 @@ public class User
     
     [Required]
     public string password { get; set; }
+    
 }
 
 

@@ -1,7 +1,5 @@
 #pragma warning disable CS8618
 
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace capsaicin_events_sharp.Entities;
@@ -24,6 +22,7 @@ public class Event
 
     [MaxLength(255)]
     public string location { get; set; }
+    
 }
 
 
