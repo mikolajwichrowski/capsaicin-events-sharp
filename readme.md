@@ -6,7 +6,7 @@ Authentication is simple and not safe for production, but serves it's purpose fo
 
 ## Use case
 
-The Certain team wants to organise events. 
+A Certain team wants to organise events. 
 Because of personal responsibilities, it is not always possible to get all the 
 members to attend these leisure activities. To help the organisers of the event plan, 
 they want an application in which this can be organised and communication can occur. 
@@ -48,7 +48,7 @@ dotnet run
 I use Postman to test api's a lot, because it allows you to import the openapi/swagger 
 documentation and generates all the requests for you. This makes life a bit easier i.m.h.o.
 The swagger documentation is still in the making and needs some more information but all the 
-requests with payload are already defined.
+requests with payload are already defined. You can find it on `http://localhost:5199/swagger`
 
 Start with the register and login endpoint. This will give you the required cookies you need on each request.
 Then you can create events with a post on the `event` endpoint and add a picture in a string format. 
